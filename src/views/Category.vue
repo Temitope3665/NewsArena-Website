@@ -19,6 +19,7 @@
         </div>
     </div>
 
+
 </div>
 </template>
 
@@ -28,7 +29,8 @@ export default {
   name: 'Category',
    data() {
     return {
-      imgUrl: 'https://www.9news.com.au/assets/img/9news-image-background.96245abf.jpg'
+      imgUrl: 'https://www.9news.com.au/assets/img/9news-image-background.96245abf.jpg',
+      
     }
   },
   watch: {

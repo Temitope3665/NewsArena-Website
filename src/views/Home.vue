@@ -40,8 +40,7 @@ export default {
   data() {
     return {
       imgUrl: 'https://www.9news.com.au/assets/img/9news-image-background.96245abf.jpg',
-      currentSource: '',
-      currentSourceId: ''
+      
     }
   },
   watch: {
@@ -53,13 +52,9 @@ export default {
   },
   computed: {
     ...mapGetters(['getAllNews']),
-    ...mapGetters(['getAllSources'])
   },
   mounted() {
     this.fetchAllNews()
-
-    const { params : { category } } = this.$route
-    this.fetchAllSources({category}) 
   },
   methods: {
     ...mapActions(['fetchAllNews', 'fetchAllSources']),
@@ -141,19 +136,6 @@ export default {
 .all-links {
   text-decoration: none;
 }
-.custom-select {
-  padding: 17px;
-  margin-left: 80px;
-  margin-right: 80px;
-  width: 80%;
-  border: none;
-  border-radius: 10px;
-  outline: none;
-  font-family: 'PT Serif Caption';
-  font-size: 16px;
-  margin-bottom: 17px;
-}
-
 .select-header {
   color: rgb(156, 160, 158);
   padding: 20px;

@@ -9,9 +9,10 @@
         <li><router-link :to="{ name: 'Category', params: {category:'sports'} }">Sports</router-link></li>
         <li><router-link :to="{ name: 'Category', params: {category:'technology'} }">Technology</router-link></li>
 
-        <div class="search-wrapper">
-          <input class="search" type="search" placeholder="Search" />
-      </div>
+         <select v-model="currentSource" name="category" id="category" class="drop_down search" @change="onChangeMethod($event)">
+          <option :value="''">Select category</option>
+          <option v-for="{ name, id, url } in getAllSources" :key="id" :value="url">{{ name }}</option>
+        </select>   
       </ul>
     </div>
     
@@ -19,11 +20,37 @@
 </template>
 
 <script>
+import { mapActions, mapGetters} from 'vuex'
 export default {
+    data() {
+        return {
+            currentSource: '',
+            currentSourceId: ''
+        }
+    },
+    watch: {
+        currentSource(source) {
+        const { query: { q }, params } = this.$route;
+        const name = this.$route.name
+        this.$route.push({ name , params, query: { source, q }});
+        }
+    },
+    computed: {
+        ...mapGetters(['getAllSources'])
+    },
+    mounted() {
+        const { params : { category } } = this.$route
+        this.fetchAllSources({category}) 
+    },
+    methods: {
+        ...mapActions(['fetchAllSources']),
 
+        onChangeMethod(event){
+            window.open(event.target.value, '_blank');
+        }
+  }
 }
 </script>
-
 <style scoped>
 #nav {
     padding: 24px;
