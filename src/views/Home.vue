@@ -7,18 +7,28 @@
     <h3>Latest News</h3>
   </div>
 
-    <select class="custom-select" name="categories" id="inputGroupSelect01" @change="onChange($event)">
-      <!-- <option class="select-header" value="" disabled selected hidden>Select a category</option> -->
+    <select class="custom-select" name="categories" id="inputGroupSelect01" v-on:change='onChange($event)'>
       <option selected>Select other category</option>
-      <option class="select-header" value="general" v-on:change="changeRoute">General</option>
-      <option class="select-header" value="health">Health</option>
+
+        <li><router-link to="/">Home</router-link></li>
+        <li><router-link :to="{ name: 'Category', params: {category:'business'} }">Business</router-link></li>
+        <li><router-link :to="{ name: 'Category', params: {category:'entertainment'} }">Entertainment</router-link></li>
+        <li><router-link :to="{ name: 'Category', params: {category:'sports'} }">Sports</router-link></li>
+        <li><router-link :to="{ name: 'Category', params: {category:'technology'} }">Technology</router-link></li>
+      
+      <!-- <option class="select-header" :value="category" v-for="(category, index) in getCategoryNews" :key="index">{{ category }}</option> -->
+      <!-- <option class="select-header" value="health">Health</option>
       <option class="select-header" value="science">Science</option>
       <option class="select-header" value="sports">Sports</option>
       <option class="select-header" value="entertainment">Entertainment</option>
       <option class="select-header" value="tech">Technology</option>
-      <option class="select-header" value="business">Business</option>
-      
+      <option class="select-header" value="business">Business</option> -->
     </select>
+
+    <!-- <select class="custom-select" name="categories" id="inputGroupSelect01" v-model="">
+      <option selected>Select other category</option>
+
+    </select> -->
   
    <div class="card-container">
      <div class="card" v-for="allNews in getAllNews" :key="allNews.id">
@@ -50,19 +60,27 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['getAllNews'])
+    ...mapGetters(['getAllNews']),
+    ...mapGetters(['getCategoryNews'])
+    // ...mapGetters(['getgetAllSources'])
   },
   mounted() {
     this.fetchAllNews()
+
+    const category = this.$route.params.category
+    this.fetchCategoriesNews(category)
+  
+    // this.onChangeCategories()
   },
   methods: {
     ...mapActions(['fetchAllNews']),
+    ...mapActions(['fetchCategoriesNews']),
+    // ...mapActions(['onChangeCategories']),
 
-    onChange() {
-      // let categorySelected = event.target.value
-      const category = this.$route.params.category
-      this.fetchCategoriesNews(category)
-      // console.log(categorySelected)
+    onChange(e) { 
+      console.log(e.target.value)
+      // const category = this.$route.params.category
+      // this.fetchCategoriesNews(category)
       }
   }
 }
