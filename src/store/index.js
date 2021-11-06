@@ -10,17 +10,17 @@ export default new Vuex.Store({
   state: {
     allNews: [],
     categoryNews: [],
-    // allSources: []
+    allSources: []
   },
   getters: {
     getAllNews: (state) => state.allNews,
     getCategoryNews: (state) => state.categoryNews,
-    // getAllSources: (state) => state.allSources
+    getAllSources: (state) => state.allSources
   },
   mutations: {
     setAllNews: (state, payload) => { state.allNews = payload },
     setCategoryNews: (state, payload) => { state.categoryNews = payload },
-    // setAllSources: (state, payload) => { state.allSources = payload }
+    setAllSources: (state, payload) => { state.allSources = payload }
   },
   actions: {
     fetchAllNews: ({ commit }) => {
@@ -41,14 +41,19 @@ export default new Vuex.Store({
         console.log(error)
       })
     },
-    // onChangeCategories: ({ commit }) => {
-    //   axios.get(`https://newsapi.org/v2/top-headlines?country=ng&category&apiKey=${apiKey}`)
-    //   .then((res) => {
-    //     console.log('show all news', res.data.articles)
-    //     commit('setAllSources', res.data.articles)
-    //   }).catch ((error) => {
-    //     console.log(error)
-    //   })
-    // }
+    fetchAllSources: ({ commit }, payload) => {
+      const {
+        category = '',
+        source = '',
+      } = payload;
+
+      axios.get(`https://newsapi.org/v2/sources?apiKey=${apiKey}&category=${category}&source=${source}`)
+      .then((res) => {
+        console.log('show all sources', res.data.sources)
+        commit('setAllSources', res.data.sources)
+      }).catch ((error) => {
+        console.log(error)
+      })
+    }
   }
 });

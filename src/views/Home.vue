@@ -7,28 +7,12 @@
     <h3>Latest News</h3>
   </div>
 
-    <select class="custom-select" name="categories" id="inputGroupSelect01" v-on:change='onChange($event)'>
-      <option selected>Select other category</option>
 
-        <li><router-link to="/">Home</router-link></li>
-        <li><router-link :to="{ name: 'Category', params: {category:'business'} }">Business</router-link></li>
-        <li><router-link :to="{ name: 'Category', params: {category:'entertainment'} }">Entertainment</router-link></li>
-        <li><router-link :to="{ name: 'Category', params: {category:'sports'} }">Sports</router-link></li>
-        <li><router-link :to="{ name: 'Category', params: {category:'technology'} }">Technology</router-link></li>
-      
-      <!-- <option class="select-header" :value="category" v-for="(category, index) in getCategoryNews" :key="index">{{ category }}</option> -->
-      <!-- <option class="select-header" value="health">Health</option>
-      <option class="select-header" value="science">Science</option>
-      <option class="select-header" value="sports">Sports</option>
-      <option class="select-header" value="entertainment">Entertainment</option>
-      <option class="select-header" value="tech">Technology</option>
-      <option class="select-header" value="business">Business</option> -->
+    <select v-model="currentSource" name="category" id="category" class="drop_down custom-select" @change="onChangeMethod($event)">
+          <option :value="''">Select category</option>
+          <option v-for="{ name, id, url } in getAllSources" :key="id" :value="url">{{ name }}</option>
     </select>
 
-    <!-- <select class="custom-select" name="categories" id="inputGroupSelect01" v-model="">
-      <option selected>Select other category</option>
-
-    </select> -->
   
    <div class="card-container">
      <div class="card" v-for="allNews in getAllNews" :key="allNews.id">
@@ -55,33 +39,34 @@ export default {
   },
   data() {
     return {
-      imgUrl: 'https://www.9news.com.au/assets/img/9news-image-background.96245abf.jpg'
+      imgUrl: 'https://www.9news.com.au/assets/img/9news-image-background.96245abf.jpg',
+      currentSource: '',
+      currentSourceId: ''
     }
   },
-
+  watch: {
+    currentSource(source) {
+    const { query: { q }, params } = this.$route;
+    const name = this.$route.name
+    this.$route.push({ name , params, query: { source, q }});
+    }
+  },
   computed: {
     ...mapGetters(['getAllNews']),
-    ...mapGetters(['getCategoryNews'])
-    // ...mapGetters(['getgetAllSources'])
+    ...mapGetters(['getAllSources'])
   },
   mounted() {
     this.fetchAllNews()
 
-    const category = this.$route.params.category
-    this.fetchCategoriesNews(category)
-  
-    // this.onChangeCategories()
+    const { params : { category } } = this.$route
+    this.fetchAllSources({category}) 
   },
   methods: {
-    ...mapActions(['fetchAllNews']),
-    ...mapActions(['fetchCategoriesNews']),
-    // ...mapActions(['onChangeCategories']),
+    ...mapActions(['fetchAllNews', 'fetchAllSources']),
 
-    onChange(e) { 
-      console.log(e.target.value)
-      // const category = this.$route.params.category
-      // this.fetchCategoriesNews(category)
-      }
+    onChangeMethod(event){
+        window.open(event.target.value, '_blank');
+    }
   }
 }
 </script>
